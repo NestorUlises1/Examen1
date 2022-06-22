@@ -1,90 +1,66 @@
 package com.example.examen;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.view.View;
 import android.widget.*;
 import android.os.Bundle;
-import android.content.DialogInterface;
 
 public class MainActivity extends AppCompatActivity {
-    private EditText txtNombre;
-    private EditText txtBase;
-    private EditText txtAltura;
-    private Button btnLimpiar;
-    private Button btnSiguiente;
-    private Button btnSalir;
-    private Rectangulo rectangulo=new Rectangulo();
-    private void btnCerrar(){
-        AlertDialog.Builder confirmar=new AlertDialog.Builder(this);
-        confirmar.setTitle("¿Cerrar aplicación?");
-        confirmar.setMessage("Se borrara la información ingreada");
-        confirmar.setPositiveButton("Confirmar",new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialogInterface, int i){
-                finish();
-            }
-        });
-        confirmar.setNegativeButton("Cancelar", new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialogInterface, int i){
-
-            }
-        });
-        confirmar.show();
-    }
-
-
+    private EditText txtCodigo,txtDescripcion,txtUnidad,txtVenta,txtCompra,txtCantidad;
+    private Button btnEnviar,btnLimpiar;
+    private EntradaProducto eP=new EntradaProducto();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        txtNombre=(EditText) findViewById(R.id.txtNombre);
-        txtBase=(EditText) findViewById(R.id.txtBase);
-        txtAltura=(EditText) findViewById(R.id.txtAltura);
+        txtCodigo=(EditText) findViewById(R.id.txtCodigo);
+        txtDescripcion=(EditText) findViewById(R.id.txtDescripcion);
+        txtUnidad=(EditText) findViewById(R.id.txtUnidad);
+        txtVenta=(EditText) findViewById(R.id.txtVenta);
+        txtCompra=(EditText) findViewById(R.id.txtCompra);
+        txtCantidad=(EditText) findViewById(R.id.txtCantidad);
+        btnEnviar=(Button) findViewById(R.id.btnEnviar);
         btnLimpiar=(Button) findViewById(R.id.btnLimpiar);
-        btnSiguiente=(Button) findViewById(R.id.btnSiguiente);
-        btnSalir=(Button) findViewById(R.id.btnSalir);
-
         btnLimpiar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txtNombre.setText("");
-                txtBase.setText("");
-                txtAltura.setText("");
+                txtCodigo.setText("");
+                txtDescripcion.setText("");
+                txtUnidad.setText("");
+                txtVenta.setText("");
+                txtCompra.setText("");
+                txtCantidad.setText("");
             }
         });
-        btnSiguiente.setOnClickListener(new View.OnClickListener() {
+        btnEnviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(txtBase.getText().toString().matches("") || txtAltura.getText().toString().matches("")|| txtNombre.getText().toString().matches("")){
-                    Toast.makeText(MainActivity.this,"Favor de llenar todos los campos",Toast.LENGTH_SHORT).show();
-
+                if(txtCodigo.getText().toString().matches("")|| txtDescripcion.getText().toString().matches("")||
+                txtUnidad.getText().toString().matches("")|| txtVenta.getText().toString().matches("")||
+                        txtCompra.getText().toString().matches("")|| txtCantidad.getText().toString().matches("")){
+                    Toast.makeText(MainActivity.this, "Faltan rellenar campos", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    if(txtBase.equals(txtAltura)){
-                        Toast.makeText(MainActivity.this,"Favor de no poner valores iguales",Toast.LENGTH_SHORT).show();
-                    }
-                    else{
-                        rectangulo.setBase(Double.parseDouble(txtBase.getText().toString()));
-                        rectangulo.setAltura(Double.parseDouble(txtAltura.getText().toString()));
-                        Intent intent=new Intent(MainActivity.this,Rectangulo.class);
-                        Bundle bundle=new Bundle();
-                        intent.putExtra("nombre",txtNombre.getText().toString());
-                        intent.putExtra("altura",txtAltura.getText().toString());
-                        intent.putExtra("base",txtBase.getText().toString());
-                        bundle.putSerializable("rec", rectangulo);
-                        startActivity(intent);
-                    }
-                }
+                    String codigo=txtCodigo.getText().toString();
+                    String descripcion=txtDescripcion.getText().toString();
+                    String unidad=txtUnidad.getText().toString();
+                    String venta=txtVenta.getText().toString();
+                    String compra=txtCompra.getText().toString();
+                    String cantidad=txtCantidad.getText().toString();
 
-            }
-        });
-        btnSalir.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btnCerrar();
+                    Intent intent = new Intent(MainActivity.this, Producto.class);
+                    intent.putExtra("Codigo",codigo);
+                    intent.putExtra("Descripcion",descripcion);
+                    intent.putExtra("Unidad",unidad);
+                    intent.putExtra("Venta",venta);
+                    intent.putExtra("Compra",compra);
+                    intent.putExtra("Cantidad",cantidad);
+                    startActivity(intent);
+
+                }
             }
         });
     }
